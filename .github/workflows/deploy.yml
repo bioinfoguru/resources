@@ -1,0 +1,29 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ] # Trigger the workflow on pushes to the main branch
+  workflow_dispatch: # Allows manual triggering
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Dependencies
+        run: npm i --legacy-peer-deps
+
+      - name: Build
+        run: npm run build
+        env:
+          BASE_PATH: /your-repo-name/ # Set your repository name here
+
+      - name: Create .nojekyll file
+        run: touch .output/public/.nojekyll
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4.5.0
+        with:
+          branch: gh-pages # The branch to deploy to
+          folder: .output/public # The folder containing build output
