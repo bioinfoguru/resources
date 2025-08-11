@@ -1,7 +1,7 @@
 import { Router, Route } from '@solidjs/router';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import LandingPage from './pages';
+import index from './pages';
 import DockingTools from './pages/docking-tools/index';
 import Ebooks from './pages/ebooks/index';
 import Games from './pages/games/index';
@@ -23,8 +23,8 @@ const Layout = (props) => (
 
 function App() {
   return (
-    <Router root={Layout}>
-  <Route path="/" component={LandingPage} />
+    <Router root={Layout} base={import.meta.env.SERVER_BASE_URL}>
+  <Route path="/" component={index} />
       <Route path="/docking-tools" component={DockingTools} />
       <Route path="/ebooks" component={Ebooks} />
       <Route path="/games" component={Games} />
