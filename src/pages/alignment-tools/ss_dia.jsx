@@ -1,4 +1,4 @@
-import { createSignal, createEffect, onMount } from 'solid-js';
+import { createSignal, createEffect } from 'solid-js';
 import Chart from 'chart.js/auto';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
@@ -760,13 +760,13 @@ export default function ProteinVisualizerApp() {
 
                                 {/* Structure Visualization */}
                                 <div class="structure-container">
-                                    <canvas ref={canvasRef} style="display: block; margin: 0 auto; background-color: white;"></canvas>
+                                    <canvas ref={canvasRef} style={{ display: 'block', margin: '0 auto', 'background-color': 'white' }}></canvas>
                                 </div>
 
                                 {/* Distribution Chart */}
                                 <div class="mb-6">
                                     <h3 class="text-lg font-semibold text-gray-700 mb-3">Secondary Structure Distribution</h3>
-                                    <div class="chart-container" style="height: 300px;">
+                                    <div class="chart-container" style={{ height: '300px' }}>
                                         <canvas ref={structureChartRef}></canvas>
                                     </div>
                                 </div>
