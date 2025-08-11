@@ -1,4 +1,4 @@
-export default function LandingPage() {
+export default function IndexPage() {
   return (
   <div class="flex flex-col min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 relative overflow-hidden">
   {/* Background animation removed to ensure footer visibility */}
