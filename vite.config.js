@@ -9,11 +9,6 @@ export default defineConfig({
   build: {
     target: 'esnext',
   },
-    start: {
-    ssr: true,
-    server: {
-      baseURL: process.env.BASE_PATH,
-      preset: "static"
-    }
-  },
+  // Add this 'base' property and remove the 'start' block
+  base: '/resources/', // IMPORTANT: Replace 'resources' with your actual repo name
 });
