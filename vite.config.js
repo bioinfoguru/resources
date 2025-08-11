@@ -9,6 +9,5 @@ export default defineConfig({
   build: {
     target: 'esnext',
   },
-  // Add this 'base' property and remove the 'start' block
-  base: '/resources/', // IMPORTANT: Replace 'resources' with your actual repo name
+  base: process.env.VITE_BASE_PATH || '/',
 });
