@@ -1,7 +1,8 @@
 import { Router, Route } from '@solidjs/router';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import index from './pages';
+// Note: It's convention to name components with a capital letter, e.g., 'Index' or 'LandingPage'
+import IndexPage from './pages'; 
 import DockingTools from './pages/docking-tools/index';
 import Ebooks from './pages/ebooks/index';
 import Games from './pages/games/index';
@@ -13,18 +14,18 @@ import msa_dia_help from './pages/alignment-tools/msa_dia_help';
 const Layout = (props) => (
   <div class="flex flex-col min-h-screen">
     <Header />
-  <main class="flex-1 flex flex-col">
-  {props.children}
+    <main class="flex-1 flex flex-col">
+      {props.children}
     </main>
-    {/* Footer Rendered banner removed */}
     <Footer />
   </div>
 );
 
 function App() {
   return (
-    <Router root={Layout} base={import.meta.env.SERVER_BASE_URL}>
-  <Route path="/" component={index} />
+    // This is the corrected line
+    <Router root={Layout} base={import.meta.env.BASE_URL}>
+      <Route path="/" component={IndexPage} />
       <Route path="/docking-tools" component={DockingTools} />
       <Route path="/ebooks" component={Ebooks} />
       <Route path="/games" component={Games} />
@@ -35,4 +36,5 @@ function App() {
     </Router>
   );
 }
+
 export default App;
