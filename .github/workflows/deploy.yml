@@ -1,16 +1,24 @@
-name: Deploy to GitHub Pages
+name: Deploy Project
 
 on:
   push:
     branches: [ main ]
   workflow_dispatch:
+    inputs:
+      deployment_target:
+        description: 'Deployment Target'
+        required: true
+        default: 'custom_domain' # This will be the default for manual runs
+        type: choice
+        options:
+        - custom_domain
+        - github_pages
 
-# Add this permissions block
 permissions:
   contents: write
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -21,7 +29,10 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          BASE_PATH: /resources/ # Make sure this is your repo name
+          # This line dynamically sets the base path for the build.
+          # If triggered by a push, it defaults to '/'.
+          # If triggered manually, it uses the selected input.
+          VITE_BASE_PATH: ${{ (github.event_name == 'push' || github.event.inputs.deployment_target == 'custom_domain') && '/' || '/resources' }}
 
       - name: Create .nojekyll file
         run: touch dist/.nojekyll
