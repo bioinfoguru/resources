@@ -2,8 +2,12 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main ] # Trigger the workflow on pushes to the main branch
-  workflow_dispatch: # Allows manual triggering
+    branches: [ main ]
+  workflow_dispatch:
+
+# Add this permissions block
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -17,7 +21,7 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          BASE_PATH: /resources/ # Set your repository name here
+          BASE_PATH: /resources/ # Make sure this is your repo name
 
       - name: Create .nojekyll file
         run: touch dist/.nojekyll
@@ -25,5 +29,5 @@ jobs:
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4.5.0
         with:
-          branch: gh-pages # The branch to deploy to
-          folder: dist # The folder containing build output
+          branch: gh-pages
+          folder: dist
