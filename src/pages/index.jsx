@@ -1,3 +1,4 @@
+import './index.css';
 export default function IndexPage() {
   return (
   <div class="flex flex-col min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 relative overflow-hidden">
@@ -73,25 +74,6 @@ export default function IndexPage() {
           </section>
         </main>
       </div>
-      <style jsx global>{`
-        @keyframes fade-in {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fade-in {
-          animation: fade-in 0.8s ease-out forwards;
-        }
-        .animate-fade-in-delay {
-          animation: fade-in 0.8s ease-out 0.3s forwards;
-          opacity: 0;
-        }
-      `}</style>
     </div>
   );
 }
