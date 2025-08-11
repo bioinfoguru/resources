@@ -10,5 +10,5 @@ export default defineConfig({
     target: 'esnext',
   },
   // Add this 'base' property and remove the 'start' block
-  base: '/resources', // IMPORTANT: Replace 'resources' with your actual repo name
+  base: '/resources/', // IMPORTANT: Replace 'resources' with your actual repo name
 });
