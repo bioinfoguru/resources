@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MSA Annotator - Interactive Multiple Sequence Alignment Tool</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>MSA Annotator</h1>
+                <div class="header-controls">
+                    <button class="btn btn--primary" id="uploadBtn">Upload MSA File</button>
+                    <button class="btn btn--secondary" id="downloadImageBtn" disabled>Download Image</button>
+                    <button class="btn btn--outline" id="downloadAnnotationsBtn" disabled>Export Annotations</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-section">
+                    <h3>File Information</h3>
+                    <div id="fileInfo" class="file-info">
+                        <p class="text-secondary">No file loaded</p>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>View Controls</h3>
+                    <div class="form-group">
+                        <label class="form-label">Color Scheme</label>
+                        <select id="colorScheme" class="form-control">
+                            <option value="none" selected>None</option>
+                            <option value="nucleotides">Nucleotides</option>
+                            <option value="aminoAcids">Amino Acids</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Line Length</label>
+                        <select id="lineLength" class="form-control">
+                            <option value="50">50 characters</option>
+                            <option value="55">55 characters</option>
+                            <option value="60" selected>60 characters</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Zoom Level</label>
+                        <div class="zoom-controls">
+                            <button class="btn btn--sm btn--outline" id="zoomOut">-</button>
+                            <span id="zoomLevel">100%</span>
+                            <button class="btn btn--sm btn--outline" id="zoomIn">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>Annotation Tools</h3>
+                    <div class="form-group">
+                        <label class="form-label">Selection Mode</label>
+                        <select id="selectionMode" class="form-control">
+                            <option value="residue">Single Residue</option>
+                            <option value="region" selected>Region</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Annotation Mode</label>
+                        <select id="annotationMode" class="form-control">
+                            <option value="fill" selected>Fill</option>
+                            <option value="border">Border Only</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Annotation Color</label>
+                        <div class="color-palette">
+                            <div class="color-option active" data-color="#FF6B6B" style="background-color: #FF6B6B;"></div>
+                            <div class="color-option" data-color="#4ECDC4" style="background-color: #4ECDC4;"></div>
+                            <div class="color-option" data-color="#45B7D1" style="background-color: #45B7D1;"></div>
+                            <div class="color-option" data-color="#FFA07A" style="background-color: #FFA07A;"></div>
+                            <div class="color-option" data-color="#DDA0DD" style="background-color: #DDA0DD;"></div>
+                            <div class="color-option" data-color="#98FB98" style="background-color: #98FB98;"></div>
+                            <div class="color-option" data-color="#F0E68C" style="background-color: #F0E68C;"></div>
+                            <div class="color-option" data-color="#FFB6C1" style="background-color: #FFB6C1;"></div>
+                        </div>
+                        <input type="color" id="customColor" class="custom-color-picker" value="#FF6B6B">
+                    </div>
+                    <div class="form-group" id="opacityGroup">
+                        <label class="form-label">Opacity</label>
+                        <input type="range" id="annotationOpacity" class="opacity-slider" min="0.1" max="1" step="0.1" value="0.7">
+                        <span id="opacityValue">70%</span>
+                    </div>
+                    <div class="form-group" id="borderWidthGroup" style="display: none;">
+                        <label class="form-label">Border Width</label>
+                        <input type="range" id="borderWidth" class="opacity-slider" min="1" max="5" step="1" value="2">
+                        <span id="borderWidthValue">2px</span>
+                    </div>
+                    <div class="annotation-actions">
+                        <button class="btn btn--sm btn--primary btn--full-width" id="addAnnotation">Add Annotation</button>
+                        <button class="btn btn--sm btn--outline btn--full-width" id="clearAnnotations">Clear All</button>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>Annotations</h3>
+                    <div id="annotationsList" class="annotations-list">
+                        <p class="text-secondary">No annotations</p>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Viewer Area -->
+            <div class="viewer-area">
+                <!-- Upload Area (shown when no file loaded) -->
+                <div id="uploadArea" class="upload-area">
+                    <div class="upload-content">
+                        <div class="upload-icon">📄</div>
+                        <h3>Upload Multiple Sequence Alignment</h3>
+                        <p>Drag and drop FASTA files here, or click to browse</p>
+                        <button class="btn btn--primary" id="browseBtn">Browse Files</button>
+                        <p class="upload-formats">Supported formats: .fasta, .fas</p>
+                    </div>
+                </div>
+
+                <!-- MSA Viewer (shown when file loaded) -->
+                <div id="msaViewer" class="msa-viewer hidden">
+                    <div class="viewer-header">
+                        <div class="sequence-info">
+                            <span id="sequenceCount">0 sequences</span>
+                            <span class="separator">•</span>
+                            <span id="alignmentLength">0 positions</span>
+                        </div>
+                        <div class="view-info">
+                            <span id="currentView">Multi-row view</span>
+                        </div>
+                    </div>
+                    <div class="canvas-container" id="canvasContainer">
+                        <canvas id="msaCanvas" class="msa-canvas"></canvas>
+                        <div class="canvas-overlay" id="canvasOverlay"></div>
+                    </div>
+                    <div class="viewer-controls">
+                        <div class="scroll-controls">
+                            <button class="btn btn--sm btn--outline" id="scrollUp">▲</button>
+                            <div class="scroll-info" id="scrollInfo">Scrollable View</div>
+                            <button class="btn btn--sm btn--outline" id="scrollDown">▼</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div class="status-info" style="display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                    <span id="cursorPosition">Position: -</span>
+                    <span class="separator">•</span>
+                    <span id="selectionInfo">No selection</span>
+                </div>
+                <a href="help.html" target="_blank" class="help-link" style="margin-left: auto; display: flex; align-items: center; gap: 6px; text-decoration: none; color: var(--color-primary); font-weight: 500;">
+                    <i class="fa fa-circle-question" aria-hidden="true"></i>
+                    Help
+                </a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="social-links">
+                    <a href="https://fb.bioinfo.guru" target="_blank" class="social-link" title="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="https://tw.bioinfo.guru" target="_blank" class="social-link" title="Twitter">
+                        <i class="fab fa-x-twitter"></i>
+                    </a>
+                    <a href="https://li.bioinfo.guru" target="_blank" class="social-link" title="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://wa.bioinfo.guru" target="_blank" class="social-link" title="WhatsApp">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <a href="https://ig.bioinfo.guru" target="_blank" class="social-link" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                </div>
+<!--                <p class="cite">cite</p> -->
+            </div>
+        </footer>
+    </div>
+
+    <!-- Hidden File Input -->
+    <input type="file" id="fileInput" accept=".fasta,.fas" style="display: none;">
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <p>Processing file...</p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
