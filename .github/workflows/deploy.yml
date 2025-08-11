@@ -17,13 +17,13 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          BASE_PATH: /your-repo-name/ # Set your repository name here
+          BASE_PATH: /resources/ # Set your repository name here
 
       - name: Create .nojekyll file
-        run: touch .output/public/.nojekyll
+        run: touch dist/.nojekyll
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4.5.0
         with:
           branch: gh-pages # The branch to deploy to
-          folder: .output/public # The folder containing build output
+          folder: dist # The folder containing build output
