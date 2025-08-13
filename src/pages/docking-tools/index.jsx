@@ -1,11 +1,36 @@
 const DockingToolsPage = () => {
   return (
     <div class="min-h-screen bg-gradient-to-br bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900">
-      
+            {/* Fade-in animation styles */}
+      <style>{`
+        .fade-in {
+          opacity: 0;
+          transform: translateY(30px);
+          animation: fadeInUp 0.8s ease-out forwards;
+        }
+        .fade-in-delay {
+          opacity: 0;
+          transform: translateY(30px);
+          animation: fadeInUp 0.8s 0.4s ease-out forwards;
+        }
+        @keyframes fadeInUp {
+          to {
+            opacity: 1;
+            transform: none;
+          }
+        }
+        .glow {
+          box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+        }
+        .glow:hover {
+          box-shadow: 0 0 30px rgba(168, 85, 247, 0.5);
+        }
+      `}</style>
+
       <main class="container mx-auto px-4 py-16">
         <section class="text-center mb-16">
-          <h1 class="text-4xl md:text-5xl font-bold text-white mb-6">Docking Tools</h1>
-          <p class="text-xl text-emerald-200 max-w-3xl mx-auto">
+          <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 fade-in">Docking Tools</h1>
+          <p class="text-xl text-emerald-200 max-w-3xl mx-auto fade-in-delay">
             Professional tools for efficient workspace management, window docking, and productivity enhancement.
           </p>
         </section>

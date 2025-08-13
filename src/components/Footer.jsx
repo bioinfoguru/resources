@@ -62,7 +62,7 @@ const Footer = () => {
 </a>
 
 <a
-  href="https://bs.bioinfo.guru"
+  href="https://bsky.app/profile/bioinfoguru.bsky.social"
   target="_blank"
   rel="noopener noreferrer"
   class="text-white/80 hover:text-white transition-colors"

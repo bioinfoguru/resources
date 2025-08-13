@@ -9,8 +9,9 @@ export default function IndexPage() {
         <main class="container mx-auto px-4 py-16 flex-1">
           <section class="text-center mb-20">
             <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 animate-fade-in">
-              Discover Amazing
-              <span class="block text-blue-400">Resources</span>
+              Futures Resources
+              <span class="block text-blue-400">at 
+			  <span class="text-purple-500 font-[Geo] drop-shadow-[0_1px_0px_rgba(255,255,255,1)]">bioinfo.guru</span></span>
             </h1>
             <p class="text-xl text-blue-200 max-w-2xl mx-auto font-semibold mt-2 animate-fade-in-delay">
               Your gateway to learning, research, and fun.

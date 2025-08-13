@@ -66,7 +66,7 @@ const EbooksPage = () => {
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
               </svg>
             </div>
-            <h3 class="text-2xl font-bold text-white mb-3">Bioinformatics</h3>
+            <h3 class="text-2xl font-bold text-white mb-3">More books</h3>
             <p class="text-emerald-100 mb-4">Coming soon...</p>
             <a href="#" class="text-emerald-300 hover:text-white font-medium">Read now →</a>
           </div>
