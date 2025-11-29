@@ -12,7 +12,7 @@ const BiologyHangman = () => {
   const [hint, setHint] = createSignal('');
   const [category, setCategory] = createSignal('');
   const [showHint, setShowHint] = createSignal(false);
-  
+
   // Biology words with hints and categories
   const biologyWords = [
     { word: 'MITOCHONDRIA', hint: 'The powerhouse of the cell', category: 'Cell Biology' },
@@ -68,14 +68,15 @@ const BiologyHangman = () => {
     { word: 'ORGAN', hint: 'Structure made of different tissues', category: 'Anatomy' },
     { word: 'ORGAN SYSTEM', hint: 'Group of organs working together', category: 'Anatomy' }
   ];
-  
+
   // Keyboard layout for on-screen keyboard
   const keyboardLayout = [
     ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
     ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
-    ['Z', 'X', 'C', 'V', 'B', 'N', 'M']
+    ['Z', 'X', 'C', 'V', 'B', 'N', 'M'],
+    [' ']
   ];
-  
+
   // Hangman images for each stage
   const hangmanImages = [
     // 0 incorrect guesses - empty gallows
@@ -149,12 +150,12 @@ const BiologyHangman = () => {
     =========
     `
   ];
-  
+
   const startGame = () => {
     // Select a random word
     const randomIndex = Math.floor(Math.random() * biologyWords.length);
     const selectedWord = biologyWords[randomIndex];
-    
+
     setWord(selectedWord.word);
     setHint(selectedWord.hint);
     setCategory(selectedWord.category);
@@ -163,25 +164,25 @@ const BiologyHangman = () => {
     setShowHint(false);
     setGameState('playing');
   };
-  
+
   const guessLetter = (letter) => {
     if (gameState() !== 'playing' || guessedLetters().includes(letter)) {
       return;
     }
-    
+
     const newGuessedLetters = [...guessedLetters(), letter];
     setGuessedLetters(newGuessedLetters);
-    
+
     // Check if the guess is incorrect
     if (!word().includes(letter)) {
       const newIncorrectGuesses = incorrectGuesses() + 1;
       setIncorrectGuesses(newIncorrectGuesses);
-      
+
       // Show hint after 3 incorrect guesses
       if (newIncorrectGuesses === 3 && !showHint()) {
         setShowHint(true);
       }
-      
+
       // Check if the game is over
       if (newIncorrectGuesses >= maxIncorrectGuesses()) {
         setGameState('gameOver');
@@ -190,30 +191,30 @@ const BiologyHangman = () => {
       // Check if the player has won
       const wordLetters = Array.from(new Set(word().split('')));
       const hasWon = wordLetters.every(l => newGuessedLetters.includes(l));
-      
+
       if (hasWon) {
         setGameState('gameOver');
       }
     }
   };
-  
+
   const handleKeyPress = (e) => {
     if (gameState() !== 'playing') return;
-    
+
     const letter = e.key.toUpperCase();
-    if (/^[A-Z]$/.test(letter)) {
+    if (/^[A-Z ]$/.test(letter)) {
       guessLetter(letter);
     }
   };
-  
+
   onMount(() => {
     window.addEventListener('keydown', handleKeyPress);
   });
-  
+
   onCleanup(() => {
     window.removeEventListener('keydown', handleKeyPress);
   });
-  
+
   // Display word with guessed letters revealed
   const displayWord = () => {
     return word()
@@ -221,29 +222,29 @@ const BiologyHangman = () => {
       .map(letter => (guessedLetters().includes(letter) ? letter : '_'))
       .join(' ');
   };
-  
+
   // Check if a letter has been guessed
   const isLetterGuessed = (letter) => {
     return guessedLetters().includes(letter);
   };
-  
+
   // Check if a letter is in the word
   const isLetterInWord = (letter) => {
     return word().includes(letter);
   };
-  
+
   // Check if the game is won
   const isGameWon = () => {
     if (gameState() !== 'gameOver') return false;
-    
+
     const wordLetters = Array.from(new Set(word().split('')));
     return wordLetters.every(letter => guessedLetters().includes(letter));
   };
-  
+
   return (
     <div class="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-green-50 p-4">
       <h1 class="text-3xl font-bold mb-6 text-green-700">Biology Hangman</h1>
-      
+
       {gameState() === 'menu' && (
         <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
           <h2 class="text-2xl font-bold mb-4 text-center">Welcome to Biology Hangman!</h2>
@@ -258,7 +259,7 @@ const BiologyHangman = () => {
               <li>Try to guess the word before the hangman is complete!</li>
             </ul>
           </div>
-          <button 
+          <button
             onClick={startGame}
             class="w-full py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition font-bold"
           >
@@ -266,7 +267,7 @@ const BiologyHangman = () => {
           </button>
         </div>
       )}
-      
+
       {(gameState() === 'playing' || gameState() === 'gameOver') && (
         <div class="w-full max-w-4xl">
           <div class="flex flex-col md:flex-row gap-6">
@@ -278,7 +279,7 @@ const BiologyHangman = () => {
                     {hangmanImages[incorrectGuesses()]}
                   </div>
                 </div>
-                
+
                 <div class="text-center mb-4">
                   <p class="text-lg font-semibold">
                     Incorrect guesses: {incorrectGuesses()} / {maxIncorrectGuesses()}
@@ -289,12 +290,12 @@ const BiologyHangman = () => {
                     </p>
                   )}
                 </div>
-                
+
                 <div class="bg-blue-50 p-4 rounded-lg mb-4">
                   <p class="font-semibold">Category:</p>
                   <p class="text-lg">{category()}</p>
                 </div>
-                
+
                 {showHint() && (
                   <div class="bg-yellow-50 p-4 rounded-lg">
                     <p class="font-semibold">Hint:</p>
@@ -303,7 +304,7 @@ const BiologyHangman = () => {
                 )}
               </div>
             </div>
-            
+
             {/* Right column - Word display and keyboard */}
             <div class="md:w-1/2">
               <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
@@ -312,7 +313,7 @@ const BiologyHangman = () => {
                     {displayWord()}
                   </div>
                 </div>
-                
+
                 {/* On-screen keyboard */}
                 <div class="mb-6">
                   {keyboardLayout.map((row, rowIndex) => (
@@ -322,35 +323,34 @@ const BiologyHangman = () => {
                           key={letter}
                           onClick={() => guessLetter(letter)}
                           disabled={isLetterGuessed(letter) || gameState() === 'gameOver'}
-                          class={`w-10 h-10 m-1 rounded-md font-bold transition ${
-                            isLetterGuessed(letter)
+                          class={`${letter === ' ' ? 'w-64' : 'w-10'} h-10 m-1 rounded-md font-bold transition ${isLetterGuessed(letter)
                               ? isLetterInWord(letter)
                                 ? 'bg-green-500 text-white'
                                 : 'bg-red-500 text-white'
                               : 'bg-gray-200 hover:bg-gray-300'
-                          }`}
+                            }`}
                         >
-                          {letter}
+                          {letter === ' ' ? 'SPACE' : letter}
                         </button>
                       ))}
                     </div>
                   ))}
                 </div>
-                
+
                 {gameState() === 'gameOver' && (
                   <div class="text-center">
                     <div class={`text-xl font-bold mb-4 ${isGameWon() ? 'text-green-600' : 'text-red-600'}`}>
                       {isGameWon() ? 'Congratulations! You won!' : 'Game Over!'}
                     </div>
-                    
+
                     {!isGameWon() && (
                       <div class="mb-4 p-3 bg-red-50 rounded-lg">
                         <p class="font-semibold">The word was:</p>
                         <p class="text-xl">{word()}</p>
                       </div>
                     )}
-                    
-                    <button 
+
+                    <button
                       onClick={startGame}
                       class="py-2 px-6 bg-green-500 text-white rounded-lg hover:bg-green-600 transition font-bold"
                     >
